@@ -15,13 +15,13 @@ def connect_ssh(host, user, pswd):
 
 
 def read_initial_output(chan):
-    output = ""
-    while True:
-        if chan.recv_ready():
-            output += chan.recv(1024).decode('utf-8')
-        else:
-            break
-        time.sleep(0.1)
+
+    chan.send('')
+
+    time.sleep(0.1)
+
+    output = chan.recv(1024).decode('utf-8')
+
     return output
 
 
@@ -51,7 +51,7 @@ def run_interactive_session(ssh_entity):
 
                     print('\n'.join(output.split('\n')[1:]), end='')
 
-                    if output.strip().endswith(('>>>', '$', '#', '>')):
+                    if output.strip().endswith(('>>>', '$', '#', '>', ':')):
                         break
 
                 time.sleep(0.1)
@@ -65,9 +65,9 @@ def run_interactive_session(ssh_entity):
 
 if __name__ == "__main__":
 
-    hostname = "hostname"
-    username = "username"
-    password = "password"
+    hostname = "192.168.0.163"
+    username = "kolobase"
+    password = "8594"
 
     object_ssh = connect_ssh(hostname, username, password)
     run_interactive_session(object_ssh)
