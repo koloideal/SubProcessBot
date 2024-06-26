@@ -52,6 +52,7 @@ def run_interactive_session(ssh_entity):
                     print('\n'.join(output.split('\n')[1:]), end='')
 
                     if output.strip().endswith(('>>>', '$', '#', '>', ':')):
+
                         break
 
                 time.sleep(0.1)

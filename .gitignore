@@ -1,2 +1,5 @@
 .venv
 .idea
+session.session
+secret_data
+database
