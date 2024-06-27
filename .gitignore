@@ -3,3 +3,6 @@
 session.session
 secret_data
 database
+handlers/__pycache__
+handlers/router_func/__pycache__
+main_func/__pycache__
