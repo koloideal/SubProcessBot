@@ -2,6 +2,17 @@ from aiogram import types
 from aiogram.fsm.context import FSMContext
 from handlers.router_func.rout_connect import ConnectWait
 from main_func.get_wi_fi_ssid import get_ssid
+from database_func.get_connects import get_connects
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.filters.callback_data import CallbackData
+
+
+class SelectConnectData(CallbackData, prefix="my", sep="#"):
+
+    host: str
+    port: str
+    username: str
+    password: str
 
 
 ssid = get_ssid()
@@ -26,7 +37,30 @@ async def callbacks_connect_button(callback: types.CallbackQuery, state: FSMCont
 
         case 'select_connection':
 
-            pass
+            connects = await get_connects(user_id=callback.from_user.id)
+
+            buttons = []
+
+            if connects:
+
+                for connect in connects:
+
+                    host, port, username, password = connect[1:]
+
+                    callback_data = SelectConnectData(host=host,
+                                                      port=port,
+                                                      username=username,
+                                                      password=password).pack()
+
+                    buttons.append([InlineKeyboardButton(text=host + ' / ' + username, callback_data=callback_data)])
+
+                keyboard: InlineKeyboardMarkup = InlineKeyboardMarkup(inline_keyboard=buttons)
+
+                await callback.message.answer('Select connection', reply_markup=keyboard)
+
+            else:
+
+                await callback.message.answer('No such')
 
         case 'delete_connection':
 
