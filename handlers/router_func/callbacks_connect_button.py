@@ -7,19 +7,18 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.filters.callback_data import CallbackData
 
 
-class SelectConnectData(CallbackData, prefix="my", sep="#"):
-
+class SelectConnectOrDeleteData(CallbackData, prefix="my", sep="#"):
     host: str
     port: str
     username: str
     password: str
+    action: str
 
 
 ssid = get_ssid()
 
 
 async def callbacks_connect_button(callback: types.CallbackQuery, state: FSMContext) -> None:
-
     action = callback.data
 
     match action:
@@ -44,19 +43,19 @@ async def callbacks_connect_button(callback: types.CallbackQuery, state: FSMCont
             if connects:
 
                 for connect in connects:
-
                     host, port, username, password = connect[1:]
 
-                    callback_data = SelectConnectData(host=host,
-                                                      port=port,
-                                                      username=username,
-                                                      password=password).pack()
+                    callback_data = SelectConnectOrDeleteData(host=host,
+                                                              port=port,
+                                                              username=username,
+                                                              password=password,
+                                                              action='connect').pack()
 
                     buttons.append([InlineKeyboardButton(text=host + ' / ' + username, callback_data=callback_data)])
 
                 keyboard: InlineKeyboardMarkup = InlineKeyboardMarkup(inline_keyboard=buttons)
 
-                await callback.message.answer('Select connection', reply_markup=keyboard)
+                await callback.message.answer('Select connection to connect', reply_markup=keyboard)
 
             else:
 
@@ -64,4 +63,23 @@ async def callbacks_connect_button(callback: types.CallbackQuery, state: FSMCont
 
         case 'delete_connection':
 
-            pass
+            connects = await get_connects(user_id=callback.from_user.id)
+
+            buttons = []
+
+            if connects:
+
+                for connect in connects:
+                    host, port, username, password = connect[1:]
+
+                    callback_data = SelectConnectOrDeleteData(host=host,
+                                                              port=port,
+                                                              username=username,
+                                                              password=password,
+                                                              action='delete').pack()
+
+                    buttons.append([InlineKeyboardButton(text=host + ' / ' + username, callback_data=callback_data)])
+
+                keyboard: InlineKeyboardMarkup = InlineKeyboardMarkup(inline_keyboard=buttons)
+
+                await callback.message.answer('Select connection to delete', reply_markup=keyboard)

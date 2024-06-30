@@ -1,7 +1,7 @@
 import sqlite3
 
 
-async def add_connect(ssh_client_data: dict) -> None:
+async def add_connect(ssh_client_data: dict) -> None | sqlite3.Error:
 
     try:
 

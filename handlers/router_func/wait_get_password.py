@@ -16,7 +16,8 @@ async def wait_get_password(message: Message, state: FSMContext):
 
     else:
 
-        result_pswd = (password[0] + ('*' * (len(password)-2)) + password[-1]) if len(password) > 2 else len(password) * '*'
+        result_pswd = (password[0] + ('*' * (len(password)-2)) + password[-1]) \
+            if len(password) > 2 else len(password) * '*'
 
         await message.delete()
 
