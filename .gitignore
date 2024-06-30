@@ -6,3 +6,6 @@ database
 handlers/__pycache__
 handlers/router_func/__pycache__
 main_func/__pycache__
+handlers/admin_router_func/__pycache__
+database_func/__pycache__
+__pycache__

@@ -19,8 +19,10 @@ from handlers.admin_router_func.get_bd_with_admins import get_admin_bd_rout
 from handlers.admin_router_func.get_bd_with_users import get_users_bd_rout
 from handlers.admin_router_func.get_bd_with_ban_users import get_ban_users_bd_rout
 from handlers.router_func.get_host_rout import get_host_rout
+from handlers.router_func.wait_get_password import wait_get_password
+from handlers.router_func.wait_get_port import wait_get_port
 from handlers.admin_router_func.drop_data import drop_data_rout
-
+from handlers.router_func.wait_get_username import wait_get_username
 
 router: Router = Router()
 
@@ -128,9 +130,28 @@ async def get_username_for_unban_user(message: types.Message, state: FSMContext)
 
 
 @router.message(ConnectWait.waiting_for_get_host)
-async def get_username_for_unban_user(message: types.Message, state: FSMContext) -> None:
+async def get_host(message: types.Message, state: FSMContext) -> None:
 
     await get_host_rout(message, state)
+
+
+@router.message(ConnectWait.waiting_for_get_port)
+async def get_port(message: types.Message, state: FSMContext) -> None:
+
+    await wait_get_port(message, state)
+
+
+@router.message(ConnectWait.waiting_for_get_username)
+async def get_username(message: types.Message, state: FSMContext) -> None:
+
+    await wait_get_username(message, state)
+
+
+@router.message(ConnectWait.waiting_for_get_password)
+async def get_password(message: types.Message, state: FSMContext) -> None:
+
+    await wait_get_password(message, state)
+
 
 
 @router.message()
