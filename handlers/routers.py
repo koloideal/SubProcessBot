@@ -25,6 +25,7 @@ from handlers.admin_router_func.drop_data import drop_data_rout
 from handlers.router_func.wait_get_username import wait_get_username
 from handlers.router_func.callbacks_connect_button import SelectConnectOrDeleteData
 from database_func.del_connect import delete_connect
+from main_func.ssh_client import ssh_client
 
 router: Router = Router()
 
@@ -140,6 +141,18 @@ async def del_connect(callback: CallbackQuery,
                       ):
 
     await delete_connect(callback, callback_data)
+
+
+@router.callback_query(SelectConnectOrDeleteData.filter(F.action == 'connect'))
+async def conn_connect(callback: CallbackQuery,
+                      callback_data: SelectConnectOrDeleteData
+                      ):
+
+    await ssh_client(message=callback.message,
+                     host=callback_data.host,
+                     port=callback_data.port,
+                     username=callback_data.username,
+                     password=callback_data.password)
 
 
 @router.message()

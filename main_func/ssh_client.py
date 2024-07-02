@@ -1,75 +1,83 @@
+import asyncio
+from aiogram import types
 import paramiko
-import time
+import html
 
 
-def connect_ssh(host, user, pswd):
+async def connect_ssh(host, port, user, pswd):
 
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
     ssh.connect(hostname=host,
                 username=user,
-                password=pswd)
+                password=pswd,
+                port=port)
 
     return ssh
 
 
-def read_initial_output(chan):
+async def read_initial_output(chan):
 
     chan.send('')
 
-    time.sleep(0.1)
+    await asyncio.sleep(0.1)
 
     output = chan.recv(1024).decode('utf-8')
 
     return output
 
 
-def run_interactive_session(ssh_entity):
+async def run_interactive_session(message: types.Message, ssh_entity):
 
     channel = ssh_entity.invoke_shell()
     channel.settimeout(0.0)
 
-    initial_output = read_initial_output(channel)
-    print(initial_output, end='')
+    initial_output = await read_initial_output(channel)
+    await message.answer(f'<code>bash</code>'
+                         f'<pre>{html.escape(initial_output)}</pre>',
+                         parse_mode='HTML')
 
-    try:
+    while True:
+        command = input('enter')
+        if command.lower() == '?exit':
+            break
+
+        channel.send(command + '\n')
+        await asyncio.sleep(0.3)
 
         while True:
-            command = input()
-            if command.lower() == '?exit':
-                break
 
-            channel.send(command + '\n')
-            time.sleep(0.3)
+            if channel.recv_ready():
 
-            while True:
+                output = channel.recv(1024).decode('utf-8')
 
-                if channel.recv_ready():
+                print('\n'.join(output.split('\n')[1:]), end='')
 
-                    output = channel.recv(1024).decode('utf-8')
+                await message.answer(f"<code>bash</code>"
+                                     f"<pre>{html.escape('\n'.join(output.split('\n')[1:-1]))}</pre>",
+                                     parse_mode='HTML', end='')
 
-                    print('\n'.join(output.split('\n')[1:]), end='')
+                if output.strip().endswith(('>>>', '$', '#', '>', ':')):
+                    break
 
-                    if output.strip().endswith(('>>>', '$', '#', '>', ':')):
-
-                        break
-
-                time.sleep(0.1)
-
-    except KeyboardInterrupt:
-
-        print("Close session")
+            await asyncio.sleep(0.1)
 
     channel.close()
 
 
-if __name__ == "__main__":
+async def ssh_client(message: types.Message,
+                     host,
+                     port,
+                     username,
+                     password):
 
-    hostname = "192.168.0.163"
-    username = "kolobase"
-    password = "8594"
+    object_ssh = await connect_ssh(
+                             host,
+                             port,
+                             username,
+                             password)
 
-    object_ssh = connect_ssh(hostname, username, password)
-    run_interactive_session(object_ssh)
+    await run_interactive_session(message, object_ssh)
+
     object_ssh.close()

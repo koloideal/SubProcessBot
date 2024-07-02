@@ -2,6 +2,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from database_func.add_connect import add_connect
 from database_func.get_connects import get_connects
+from main_func.ssh_client import ssh_client
 
 
 async def wait_get_password(message: Message, state: FSMContext):
@@ -51,7 +52,11 @@ async def wait_get_password(message: Message, state: FSMContext):
 
                 await message.answer('Connection successfully added')
 
-                # await client_ssh()
+                await ssh_client(message=message,
+                                 host=ssh_client_data['host'],
+                                 port=ssh_client_data['port'],
+                                 username=ssh_client_data['username'],
+                                 password=ssh_client_data['password'])
 
             else:
 
@@ -62,5 +67,8 @@ async def wait_get_password(message: Message, state: FSMContext):
 
         else:
 
-            pass
-            # await client_ssh()
+            await ssh_client(message=message,
+                             host=ssh_client_data['host'],
+                             port=ssh_client_data['port'],
+                             username=ssh_client_data['username'],
+                             password=ssh_client_data['password'])
