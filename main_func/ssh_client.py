@@ -40,7 +40,7 @@ async def run_interactive_session(message: types.Message, ssh_entity):
                          parse_mode='HTML')
 
     while True:
-        command = input('enter')
+        command = input()
         if command.lower() == '?exit':
             break
 
@@ -55,17 +55,19 @@ async def run_interactive_session(message: types.Message, ssh_entity):
 
                 output = channel.recv(1024).decode('utf-8')
 
+                pwd = output.split('\n')[-1]
+
+                pwd = re.sub('\\[\\?2004h', '', pwd)
+
                 output = html.escape('\n'.join(output.split('\n')[1:-1]))
 
                 output = re.sub('(\\[\\d{1,2};\\d{1,2}m)|(\\[\\dm)|(\\[\\?2004l)', '', output)
 
                 output = output.strip()
 
-                print(output, end='')
-
                 if output:
 
-                    await message.answer(f"<code>bash</code>"
+                    await message.answer(f"<code>{pwd}</code>"
                                          f"<pre>{output}</pre>",
                                          parse_mode='HTML', end='')
                 else:
