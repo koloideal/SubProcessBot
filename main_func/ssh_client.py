@@ -57,23 +57,25 @@ async def run_interactive_session(message: types.Message, ssh_entity):
 
                 pwd = output.split('\n')[-1]
 
-                pwd = re.sub('\\[\\?2004h', '', pwd)
+                pwd = re.sub(r'\[\?2004\w', '', pwd).strip()
 
                 output = html.escape('\n'.join(output.split('\n')[1:-1]))
 
-                output = re.sub('(\\[\\d{1,2};\\d{1,2}m)|(\\[\\dm)|(\\[\\?2004l)', '', output)
+                output = re.sub(r'(\[\d{1,2};\d{1,2}m)|(\[\dm)|(\[\?2004\w)', '', output)
 
                 output = output.strip()
 
                 if output:
 
-                    await message.answer(f"<code>{pwd}</code>"
-                                         f"<pre>{output}</pre>",
-                                         parse_mode='HTML', end='')
+                    await message.answer(f"`{pwd}`"
+                                         f"```bash"
+                                         f"{output}"
+                                         f"```",
+                                         parse_mode='markdownv2')
                 else:
 
-                    await message.answer(f'<pre>{html.escape(">>>")}</pre>',
-                                         parse_mode='HTML')
+                    await message.answer(f'`{pwd}`',
+                                         parse_mode='markdownv2')
 
                 if output.strip().endswith(('>>>', '$', '#', '>', ':')):
                     break

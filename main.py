@@ -7,7 +7,6 @@ from aiogram import Bot, Dispatcher
 from telethon import TelegramClient
 import asyncio
 import logging
-from main_func.get_wi_fi_ssid import get_ssid
 
 config: ConfigParser = ConfigParser()
 config.read('secret_data/config.ini')
