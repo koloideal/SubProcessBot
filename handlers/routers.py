@@ -2,7 +2,7 @@ from aiogram import types, F, Router
 from aiogram.types import CallbackQuery
 from aiogram.fsm.context import FSMContext
 from aiogram.filters import Command
-from handlers.router_func.rout_connect import AdminState, button_to_connect_rout, ConnectWait
+from handlers.router_func.rout_connect import AdminState, button_to_connect_rout, ConnectWait, IOCommands
 from handlers.router_func.rout_help import button_to_help_rout
 from handlers.router_func.rout_start import start_rout
 from handlers.router_func.callbacks_connect_button import callbacks_connect_button
@@ -25,7 +25,7 @@ from handlers.admin_router_func.drop_data import drop_data_rout
 from handlers.router_func.wait_get_username import wait_get_username
 from handlers.router_func.callbacks_connect_button import SelectConnectOrDeleteData
 from database_func.del_connect import delete_connect
-from main_func.ssh_client import ssh_client
+from main_func.ssh_client import ssh_client, io_commands
 
 router: Router = Router()
 
@@ -95,6 +95,12 @@ async def callbacks_routing(callback: CallbackQuery, state: FSMContext) -> None:
     await callbacks_connect_button(callback, state)
 
 
+@router.message(IOCommands.main_state)
+async def io__commands(message: types.Message, state: FSMContext) -> None:
+
+    await io_commands(message, state)
+
+
 @router.message(AdminState.waiting_for_add_admin)
 async def get_username_for_add_admin(message: types.Message, state: FSMContext) -> None:
     await get_username_for_add_admin_rout(message, state)
@@ -145,14 +151,16 @@ async def del_connect(callback: CallbackQuery,
 
 @router.callback_query(SelectConnectOrDeleteData.filter(F.action == 'connect'))
 async def conn_connect(callback: CallbackQuery,
-                      callback_data: SelectConnectOrDeleteData
+                       callback_data: SelectConnectOrDeleteData,
+                       state: FSMContext
                       ):
 
     await ssh_client(message=callback.message,
                      host=callback_data.host,
                      port=callback_data.port,
                      username=callback_data.username,
-                     password=callback_data.password)
+                     password=callback_data.password,
+                     state=state)
 
 
 @router.message()

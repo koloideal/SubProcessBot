@@ -19,6 +19,10 @@ class AdminState(StatesGroup):
     waiting_for_unban_user: State = State()
 
 
+class IOCommands(StatesGroup):
+    main_state: State = State()
+
+
 async def button_to_connect_rout(message: Message) -> None:
     user_id: int = message.from_user.id
 
