@@ -3,7 +3,7 @@ from aiogram.fsm.context import FSMContext
 from configparser import ConfigParser
 from telethon.sync import TelegramClient
 from telethon.errors.rpcerrorlist import UsernameInvalidError
-from database_func.add_admin import admin_to_database
+from database_func.add_allowed_user import admin_to_database
 from telethon.helpers import TotalList
 
 

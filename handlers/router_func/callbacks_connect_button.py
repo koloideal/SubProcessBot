@@ -2,7 +2,7 @@ from aiogram import types
 from aiogram.fsm.context import FSMContext
 from handlers.router_func.rout_connect import ConnectWait
 from main_func.get_wi_fi_ssid import get_ssid
-from database_func.get_connects import get_connects
+from database_func.get_commands import get_connects
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.filters.callback_data import CallbackData
 
