@@ -18,7 +18,7 @@ api_hash: str = config['Telegram']['api_hash']
 client: TelegramClient = TelegramClient('session', int(api_id), api_hash)
 
 
-async def get_username_for_add_admin_rout(message: types.Message, state: FSMContext) -> None:
+async def get_username_for_add_allowed_user_rout(message: types.Message, state: FSMContext) -> None:
 
     try:
 

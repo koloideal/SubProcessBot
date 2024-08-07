@@ -2,31 +2,25 @@ from aiogram import types
 from aiogram.types import FSInputFile
 from datetime import datetime
 from aiogram.exceptions import TelegramBadRequest
-from handlers.router_func.rout_start import creator_id
+import logging
 
 
 async def get_logs_rout(message: types.Message) -> None:
 
-    user_id: int = message.from_user.id
+    full_file_name: str = f'secret_data/logs.txt'
 
-    if user_id != creator_id:
+    document: FSInputFile = FSInputFile(full_file_name)
 
-        await message.answer('Unknown command, enter /help')
+    captions: str = f'before {datetime.now().strftime("%d-%m-%Y")}'
 
-    else:
+    try:
 
-        full_file_name: str = f'secret_data/logs.txt'
+        await message.answer_document(document=document, caption=captions)
 
-        document: FSInputFile = FSInputFile(full_file_name)
+    except Exception as e:
 
-        captions: str = f'before {datetime.now().strftime("%d-%m-%Y")}'
+        logging.error(e, exc_info=True)
 
-        try:
-
-            await message.answer_document(document=document, caption=captions)
-
-        except TelegramBadRequest:
-
-            await message.answer('Logs are empty, enter /start and try again')
+        await message.answer('Logs are empty, enter /start and try again')
 
     return
