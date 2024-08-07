@@ -10,16 +10,17 @@ async def add_allowed_user(message: types.Message, user_id: int, user_username: 
     cursor: Cursor = connection.cursor()
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS allowed_users 
-                      (id int,
-                      username varchar(50),
+                      (id INTEGER,
+                      username TEXT,
+                      commands TEXT DEFAULT '',
                       UNIQUE(id))''')
 
     connection.commit()
 
     cursor.execute('''INSERT OR IGNORE INTO allowed_users 
-                      (id, username)
-                      VALUES (?, ?)''',
-                   (user_id, user_username))
+                      (id, username, commands)
+                      VALUES (?, ?, ?)''',
+                   (user_id, user_username, None))
 
     connection.commit()
 

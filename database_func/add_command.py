@@ -1,45 +1,24 @@
 import sqlite3
+from aiogram.fsm.context import FSMContext
+from aiogram.types import Message
 
 
-async def add_connect(ssh_client_data: dict) -> None | sqlite3.Error:
+async def add_command(message: Message, state: FSMContext) -> None:
 
-    try:
+    command = str(message.text.strip().split())
 
-        user_id = ssh_client_data["id"]
-        username = ssh_client_data["username"]
-        password = ssh_client_data["password"]
-        port = ssh_client_data["port"]
-        host = ssh_client_data["host"]
-
-        connection = sqlite3.connect("database/ssh_client_data.db")
-
-        cursor = connection.cursor()
-
-        cursor.execute('''
-        CREATE TABLE IF NOT EXISTS connections(
-        id INTEGER,
-        host TEXT NOT NULL,
-        port TEXT NOT NULL,
-        username TEXT NOT NULL,
-        password TEXT NOT NULL
-        )''')
-
-        connection.commit()
-
-        cursor.execute('''
-        INSERT INTO connections(id, host, port, username, password)
-        VALUES (?, ?, ?, ?, ?)
-        ''', (user_id, host, port, username, password))
-
-        connection.commit()
-
+    with sqlite3.connect('database/allowed_users.db') as connect:
+        cursor = connect.cursor()
+        cursor.execute('''SELECT commands FROM allowed_users WHERE id = ?''', (message.from_user.id, ))
+        results = cursor.fetchone()
+        results = results if results[0] else 'None'
+        commands = ';'.join(list(results)) if results != 'None' else ''
+        commands = (commands + ';' + command) if commands else command
+        cursor.execute('''UPDATE allowed_users SET commands = ? WHERE id = ?''', (commands, message.from_user.id))
         cursor.close()
-        connection.close()
 
-    except sqlite3.Error as error:
+    await message.answer('Successful adding command')
 
-        return error
+    await state.clear()
 
-    else:
 
-        return

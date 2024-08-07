@@ -3,7 +3,7 @@ from aiogram.fsm.context import FSMContext
 from configparser import ConfigParser
 from telethon.sync import TelegramClient
 from telethon.errors.rpcerrorlist import UsernameInvalidError
-from database_func.add_allowed_user import admin_to_database
+from database_func.add_allowed_user import add_allowed_user
 from telethon.helpers import TotalList
 
 
@@ -28,9 +28,9 @@ async def get_username_for_add_admin_rout(message: types.Message, state: FSMCont
 
             raise ValueError
 
-        future_admin_username: str = message.text if message.text[0] != '@' else message.text[1:]
+        future_allowed_user_username: str = message.text.strip() if message.text[0] != '@' else message.text[1:].strip()
 
-        user: TotalList = await client.get_participants(future_admin_username)
+        user: TotalList = await client.get_participants(future_allowed_user_username)
 
         if user[0].bot or len(user) != 1:
 
@@ -42,19 +42,12 @@ async def get_username_for_add_admin_rout(message: types.Message, state: FSMCont
 
     else:
 
-        user_username: str = future_admin_username
-        user_id: int = user[0].id
-        user_first_name: str = user[0].first_name
-        user_last_name: str = user[0].last_name
+        user_username: str = future_allowed_user_username
+        user_id: int = int(user[0].id)
 
-        await admin_to_database(message=message, future_admin={
-
-            'user_id': user_id,
-            'user_first_name': user_first_name,
-            'user_last_name': user_last_name,
-            'user_username': user_username
-
-        })
+        await add_allowed_user(message=message,
+                               user_username=user_username,
+                               user_id=user_id)
 
     finally:
 

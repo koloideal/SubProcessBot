@@ -8,8 +8,9 @@ async def get_allowed_users() -> list:
     cursor: Cursor = connection.cursor()
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS allowed_users 
-                     (id int,
-                      username varchar(50),
+                     (id INTEGER,
+                      username TEXT,
+                      commands TEXT DEFAULT '',
                       UNIQUE(id))''')
 
     connection.commit()
