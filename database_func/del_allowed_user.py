@@ -12,7 +12,7 @@ async def del_allowed_user(message: types.Message, user_username: str) -> None:
     cursor.execute('''CREATE TABLE IF NOT EXISTS allowed_users 
                       (id INTEGER,
                       username TEXT,
-                      commands TEXT DEFAULT '',
+                      commands TEXT DEFAULT 'uname',
                       UNIQUE(id))''')
 
     connection.commit()

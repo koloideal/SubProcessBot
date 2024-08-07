@@ -6,6 +6,8 @@ from handlers.admin_router_func.del_allowed_user_rout import del_allowed_user_ro
 from handlers.admin_router_func.wait_username_add_allowed_user import get_username_for_add_allowed_user_rout
 from handlers.admin_router_func.wait_username_del_allowed_user import get_username_for_del_allowed_user_rout
 from handlers.router_func.rout_add_command import add_command_rout
+from handlers.router_func.rout_buttons import buttons
+from handlers.router_func.rout_commands import commands_buttons_rout
 from handlers.router_func.rout_start import start_rout
 from handlers.admin_router_func.add_allowed_user_rout import add_allowed_user_rout
 from handlers.admin_router_func.get_logs_rout import get_logs_rout
@@ -25,8 +27,8 @@ async def start_routing(message: types.Message) -> None:
 
 @router.message(FilterByAllowedUser(),
                 Command('commands'))
-async def connect_routing(message: types.Message) -> None:
-    pass
+async def commands_routing(message: types.Message) -> None:
+    await commands_buttons_rout(message)
 
 
 @router.message(FilterByCreator(),
@@ -78,6 +80,11 @@ async def del_allowed_user_routing(message: types.Message, state: FSMContext) ->
 @router.message(AddCommandState.wait_add_command)
 async def add_command_routing(message: types.Message, state: FSMContext) -> None:
     await add_command(message,state)
+
+
+@router.callback_query()
+async def buttons_routing(callback: types.CallbackQuery) -> None:
+    await buttons(callback)
 
 
 @router.message()

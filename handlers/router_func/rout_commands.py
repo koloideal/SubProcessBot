@@ -1,19 +1,38 @@
-from aiogram.types import Message
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from aiogram.fsm.state import StatesGroup, State
+from aiogram.types import Message, InlineKeyboardMarkup
+from aiogram.types import InlineKeyboardButton
+from database_func.get_commands import get_commands
 
 
-class AllowedUserState(StatesGroup):
-    waiting_for_add_command: State = State()
+MAX_ROW_LENGTH = 20
 
 
-class CreatorState(StatesGroup):
-    waiting_for_add_allowed_user: State = State()
-    waiting_for_del_allowed_user: State = State()
+async def create_dynamic_keyboard(button_texts):
+    keyboard = []
+    row = []
+    current_row_length = 0
+
+    for text in button_texts:
+        button = InlineKeyboardButton(text=text, callback_data=text)
+        if current_row_length + len(text) > MAX_ROW_LENGTH:
+            keyboard.append(row)
+            row = []
+            current_row_length = 0
+        row.append(button)
+        current_row_length += len(text)
+
+    if row:
+        keyboard.append(row)
+
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
 
 async def commands_buttons_rout(message: Message) -> None:
 
+    commands = await get_commands(message.from_user.id)
 
+    keyboard = await create_dynamic_keyboard(commands)
 
-    return
+    await message.answer(
+        "Your commands, press it to run",
+        reply_markup=keyboard
+    )

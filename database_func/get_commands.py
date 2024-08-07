@@ -1,29 +1,27 @@
 import sqlite3
+import re
 
 
-async def get_connects(user_id) -> list:
+async def get_commands(user_id) -> list:
 
-    connection = sqlite3.connect('database/ssh_client_data.db')
-    cursor = connection.cursor()
+    with sqlite3.connect('database/allowed_users.db') as connection:
 
-    cursor.execute('''
-            CREATE TABLE IF NOT EXISTS connections(
-            id INTEGER,
-            host TEXT NOT NULL,
-            port TEXT NOT NULL,
-            username TEXT NOT NULL,
-            password TEXT NOT NULL
-            )''')
+        cursor = connection.cursor()
 
-    connection.commit()
+        cursor.execute('''
+                CREATE TABLE IF NOT EXISTS allowed_users(
+                id INTEGER,
+                username TEXT NOT NULL,
+                commands TEXT DEFAULT 'uname'
+                )''')
 
-    cursor.execute('''
-    SELECT * FROM connections WHERE id = ?
-    ''', (int(user_id), ))
+        connection.commit()
 
-    connects = cursor.fetchall()
+        cursor.execute('''SELECT commands FROM allowed_users WHERE id = ?''', (user_id, ))
+        commands = cursor.fetchone()[0]
 
-    cursor.close()
-    connection.close()
+        commands = commands.split(';')
 
-    return connects
+        cursor.close()
+
+    return commands
