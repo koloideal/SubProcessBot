@@ -7,4 +7,4 @@ async def add_allowed_user_rout(message: types.Message, state: FSMContext) -> No
 
     await message.answer('Enter username for adding allowed user')
 
-    await state.set_state(AddAllowedUserState.wait_username_allowed_user)
+    await state.set_state(AddAllowedUserState.wait_username_add_allowed_user)

@@ -1,6 +1,5 @@
 from aiogram import types
 from aiogram.fsm.context import FSMContext
-from handlers.router_func.rout_commands import ConnectWait
 from main_func.get_wi_fi_ssid import get_ssid
 from database_func.get_commands import get_connects
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
