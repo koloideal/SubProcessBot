@@ -12,7 +12,7 @@ async def get_commands(user_id) -> list:
                 CREATE TABLE IF NOT EXISTS allowed_users(
                 id INTEGER,
                 username TEXT NOT NULL,
-                commands TEXT DEFAULT 'uname'
+                commands TEXT DEFAULT 'uname;'
                 )''')
 
         connection.commit()
@@ -20,7 +20,7 @@ async def get_commands(user_id) -> list:
         cursor.execute('''SELECT commands FROM allowed_users WHERE id = ?''', (user_id, ))
         commands = cursor.fetchone()[0]
 
-        commands = commands.split(';')
+        commands = commands[:-1].split(';')
 
         cursor.close()
 

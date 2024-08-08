@@ -12,7 +12,7 @@ async def start_rout(message: types.Message) -> None:
     user_id: int = message.from_user.id
 
     allowed_users_id: list = await get_allowed_users()
-    creator = user_id == user_id
+    creator = user_id == creator_id
     allowed_user = (user_id in allowed_users_id) and (user_id != creator_id)
     not_allowed_user = (user_id not in allowed_users_id) and (user_id != creator_id)
 
@@ -22,6 +22,7 @@ async def start_rout(message: types.Message) -> None:
                              f"What do you want to do today? 💭\n\n"
                              f"To run commands, click <b><i>/commands</i></b>👈\n\n"
                              f"Add command - <b><i>/add_command</i></b> 👈\n\n"
+                             f"Del command - <b><i>/del_command</i></b> 👈\n\n"
                              f"---------- Creator's Commands👇----------\n\n"
                              f"Add allowed user - <b><i>/add_user</i></b> 👈\n\n"
                              f"Delete allowed user - <b><i>/del_user</i></b> 👈\n\n"
@@ -33,9 +34,10 @@ async def start_rout(message: types.Message) -> None:
     elif allowed_user:
 
         await message.answer(f"Hello, I am a <b>SubProcessBot</b>🤖\n\n"
-                             f"What do you want to do today? 💭"
-                             f"To run commands, press <b><i>/commands</i></b> 👈"
-                             f"Add command - <b><i>/add_command</i></b> 👈\n\n"
+                             f"What do you want to do today? 💭\n\n"
+                             f"To run commands, press <b><i>/commands</i></b> 👈\n"
+                             f"Add command - <b><i>/add_command</i></b> 👈"
+                             f"Del command - <b><i>/del_command</i></b> 👈\n\n"
                              f"\n\n\n<b><i>made by <a href='https://t.me/kolo_id '>kolo</a></i></b>",
                              disable_web_page_preview=True)
 
