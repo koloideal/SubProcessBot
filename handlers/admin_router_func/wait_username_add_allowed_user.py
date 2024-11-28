@@ -1,4 +1,4 @@
-from aiogram import types
+from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from configparser import ConfigParser
 from telethon.sync import TelegramClient
@@ -18,7 +18,7 @@ api_hash: str = config['Telegram']['api_hash']
 client: TelegramClient = TelegramClient('session', int(api_id), api_hash)
 
 
-async def get_username_for_add_allowed_user_rout(message: types.Message, state: FSMContext) -> None:
+async def get_username_for_add_allowed_user_rout(message: Message, state: FSMContext) -> None:
 
     try:
 

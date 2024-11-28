@@ -1,8 +1,8 @@
-from aiogram import types
+from aiogram.types import Message
 import os
 
 
-async def drop_logs_rout(message: types.Message) -> None:
+async def drop_logs_rout(message: Message) -> None:
 
     os.remove('secret_data/logs.txt')
 

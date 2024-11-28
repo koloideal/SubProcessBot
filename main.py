@@ -11,7 +11,7 @@ import logging
 config: ConfigParser = ConfigParser()
 config.read('secret_data/config.ini')
 
-bot_token: str = config.get('Telegram', 'bot_token')
+bot_token: str = config.get('Telegram', 'test_bot_token')
 api_id: int = int(config['Telegram']['api_id'])
 api_hash: str = config['Telegram']['api_hash']
 
@@ -29,9 +29,7 @@ os.makedirs('database', exist_ok=True)
 
 
 async def main() -> None:
-
     from handlers.routers import router
-
     logging.warning('Starting bot...')
     dp.include_router(router)
 
@@ -40,11 +38,8 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-
     try:
-
         print("\n\033[1m\033[30m\033[44m {} \033[0m".format("Starting bot..."))
-
         logger = logging.getLogger(__name__)
         logging.basicConfig(level=logging.WARNING,
                             filename='secret_data/logs.txt',
@@ -54,9 +49,6 @@ if __name__ == "__main__":
         asyncio.run(main())
 
     except KeyboardInterrupt:
-
         print("\n\033[1m\033[30m\033[45m {} \033[0m".format("End of work..."))
-
         logging.warning('End of work...')
-
         exit()

@@ -1,4 +1,7 @@
-from aiogram import types
+import typing
+if typing.TYPE_CHECKING:
+    from _typeshed import SupportsWrite
+from aiogram.types import Message
 from aiogram.types import FSInputFile
 from datetime import datetime
 import sqlite3
@@ -6,7 +9,7 @@ import json
 import os
 
 
-async def get_users_bd_rout(message: types.Message) -> None:
+async def get_users_bd_rout(message: Message) -> None:
 
     with sqlite3.connect('database/allowed_users.db') as connect:
         cursor = connect.cursor()
@@ -27,7 +30,7 @@ async def get_users_bd_rout(message: types.Message) -> None:
 
     full_file_name: str = f'secret_data/allowed_users.json'
 
-    with open(full_file_name, 'w', encoding='utf8') as file:
+    with open(full_file_name, 'w', encoding='utf8') as file: # type: SupportsWrite[str]
 
         json.dump(to_dump_data, file, indent=4, ensure_ascii=False)
 

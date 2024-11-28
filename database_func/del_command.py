@@ -14,7 +14,3 @@ async def del_command(callback: CallbackQuery) -> None:
         cursor.close()
 
     logging.warning(f'Delete command')
-
-    await callback.message.answer(f'Delete command {callback.data[:-6]}')
-
-

@@ -1,9 +1,9 @@
-from aiogram import types
+from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from handlers.states import AddCommandState
 
 
-async def add_command_rout(message: types.Message, state: FSMContext) -> None:
+async def add_command_rout(message: Message, state: FSMContext) -> None:
 
     await message.answer('Enter new command')
 

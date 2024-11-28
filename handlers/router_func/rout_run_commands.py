@@ -29,7 +29,6 @@ async def create_dynamic_keyboard(button_texts, delete=False):
 async def commands_buttons_rout(message: Message) -> None:
 
     commands = await get_commands(message.from_user.id)
-
     keyboard = await create_dynamic_keyboard(commands)
 
     await message.answer(
