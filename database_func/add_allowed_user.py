@@ -4,29 +4,35 @@ from aiogram import types
 import logging
 
 
-async def add_allowed_user(message: types.Message, user_id: int, user_username: str) -> None:
-
-    connection: Connection = sqlite3.connect('database/allowed_users.db')
+async def add_allowed_user(
+    message: types.Message, user_id: int, user_username: str
+) -> None:
+    connection: Connection = sqlite3.connect("database/allowed_users.db")
     cursor: Cursor = connection.cursor()
 
-    cursor.execute('''CREATE TABLE IF NOT EXISTS allowed_users 
+    cursor.execute("""CREATE TABLE IF NOT EXISTS allowed_users 
                       (id INTEGER,
                       username TEXT,
                       commands TEXT DEFAULT 'uname;',
-                      UNIQUE(id))''')
+                      UNIQUE(id))""")
 
     connection.commit()
 
-    cursor.execute('''INSERT OR IGNORE INTO allowed_users 
+    cursor.execute(
+        """INSERT OR IGNORE INTO allowed_users 
                       (id, username)
-                      VALUES (?, ?)''',
-                   (user_id, user_username, ))
+                      VALUES (?, ?)""",
+        (
+            user_id,
+            user_username,
+        ),
+    )
 
     connection.commit()
 
     cursor.close()
     connection.close()
 
-    logging.warning(f'User @{user_username} is now an allowed user or already was')
+    logging.warning(f"User @{user_username} is now an allowed user or already was")
 
-    await message.answer(f'@{user_username} is now an allowed user or already was')
+    await message.answer(f"@{user_username} is now an allowed user or already was")

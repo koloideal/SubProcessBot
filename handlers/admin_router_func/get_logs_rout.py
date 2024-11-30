@@ -5,8 +5,7 @@ import logging
 
 
 async def get_logs_rout(message: Message) -> None:
-
-    full_file_name: str = 'secret_data/logs.txt'
+    full_file_name: str = "secret_data/logs.txt"
     document: FSInputFile = FSInputFile(full_file_name)
     captions: str = f'before {datetime.now().strftime("%d-%m-%Y")}'
 
@@ -15,4 +14,4 @@ async def get_logs_rout(message: Message) -> None:
 
     except Exception as e:
         logging.error(e, exc_info=True)
-        await message.answer('Logs are empty, enter /start and try again')
+        await message.answer("Logs are empty, enter /start and try again")

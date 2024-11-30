@@ -9,4 +9,3 @@ async def callback_query(callback: CallbackQuery):
     commands = await get_commands(callback.from_user.id)
     keyboard = await create_dynamic_keyboard(commands, True)
     await callback.message.edit_reply_markup(reply_markup=keyboard)
-

@@ -5,25 +5,24 @@ import logging
 
 
 async def del_allowed_user(message: types.Message, user_username: str) -> None:
-
-    connection: Connection = sqlite3.connect('database/allowed_users.db')
+    connection: Connection = sqlite3.connect("database/allowed_users.db")
     cursor: Cursor = connection.cursor()
 
-    cursor.execute('''CREATE TABLE IF NOT EXISTS allowed_users 
+    cursor.execute("""CREATE TABLE IF NOT EXISTS allowed_users 
                       (id INTEGER,
                       username TEXT,
                       commands TEXT DEFAULT 'uname;',
-                      UNIQUE(id))''')
+                      UNIQUE(id))""")
 
     connection.commit()
 
-    cursor.execute('''DELETE FROM allowed_users WHERE username = ?''', (user_username, ))
+    cursor.execute("""DELETE FROM allowed_users WHERE username = ?""", (user_username,))
 
     connection.commit()
 
     cursor.close()
     connection.close()
 
-    logging.warning(f'User @{user_username} is now not allowed user')
+    logging.warning(f"User @{user_username} is now not allowed user")
 
-    await message.answer(f'@{user_username} is now not allowed user')
+    await message.answer(f"@{user_username} is now not allowed user")

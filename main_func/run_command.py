@@ -9,7 +9,7 @@ async def run_command(command):
             check=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True
+            text=True,
         )
         if len(result.stdout) > 4000:
             return result.stdout[:4000]
