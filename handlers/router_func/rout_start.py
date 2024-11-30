@@ -36,7 +36,7 @@ async def start_rout(message: Message) -> None:
 
     elif allowed_user:
         await message.answer(
-            "Hello, I am a <b>SubProcessBot</b>🤖\n\n"
+            "Hello, I am a <b>ExecoBot</b>🤖\n\n"
             "What do you want to do today? 💭\n\n"
             "To run commands, press <b><i>/commands</i></b> 👈\n\n"
             "To run command, press <b><i>/command</i></b> 👈\n\n"
@@ -49,7 +49,7 @@ async def start_rout(message: Message) -> None:
 
     elif not_allowed_user:
         await message.answer(
-            "Hello, I am a <b>SubProcessBot</b>🤖\n\n"
+            "Hello, I am a <b>ExecoBot</b>🤖\n\n"
             "<b>You do not have access to the bot, to get it write @kolo_id</b>"
             "\n\n\n<b><i>made by <a href='https://t.me/kolo_id '>kolo</a></i></b>",
             disable_web_page_preview=True,

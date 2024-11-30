@@ -11,7 +11,7 @@ import logging
 config: ConfigParser = ConfigParser()
 config.read("secret_data/config.ini")
 
-bot_token: str = config.get("Telegram", "test_bot_token")
+bot_token: str = config.get("Telegram", "bot_token")
 api_id: int = int(config["Telegram"]["api_id"])
 api_hash: str = config["Telegram"]["api_hash"]
 
