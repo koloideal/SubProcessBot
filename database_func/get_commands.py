@@ -1,5 +1,4 @@
 import sqlite3
-import re
 
 
 async def get_commands(user_id) -> list:

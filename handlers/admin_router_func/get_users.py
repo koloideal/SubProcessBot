@@ -1,6 +1,6 @@
 import typing
 if typing.TYPE_CHECKING:
-    from _typeshed import SupportsWrite
+    pass
 from aiogram.types import Message
 from aiogram.types import FSInputFile
 from datetime import datetime
@@ -28,7 +28,7 @@ async def get_users_bd_rout(message: Message) -> None:
 
         }
 
-    full_file_name: str = f'secret_data/allowed_users.json'
+    full_file_name: str = 'secret_data/allowed_users.json'
 
     with open(full_file_name, 'w', encoding='utf8') as file: # type: SupportsWrite[str]
 

@@ -13,4 +13,4 @@ async def del_command(callback: CallbackQuery) -> None:
         cursor.execute('''UPDATE allowed_users SET commands = ? WHERE id = ?''', (commands, callback.from_user.id))
         cursor.close()
 
-    logging.warning(f'Delete command')
+    logging.warning('Delete command')

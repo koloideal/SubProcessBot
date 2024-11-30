@@ -18,8 +18,8 @@ async def add_command(message: Message, state: FSMContext) -> None:
 
     await state.clear()
 
-    logging.warning(f'Adding new command')
+    logging.warning('Adding new command')
 
-    await message.answer(f'Adding new command')
+    await message.answer('Adding new command')
 
 
